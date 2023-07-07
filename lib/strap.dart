@@ -2,44 +2,46 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class StrapWatch extends StatefulWidget {
+  const StrapWatch({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<StrapWatch> createState() => _StrapWatchState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  // DateTime h = DateTime.now();
+class _StrapWatchState extends State<StrapWatch> {
+  @override
   int h = 0;
-  int s = 0;
   int m = 0;
+  int s = 0;
 
-  myClock() {
+  MyWatch() {
     Future.delayed(Duration(seconds: 1), () {
       setState(() {
-        h = DateTime.now().hour;
-        s = DateTime.now().second;
+        h = DateTime.now().hour % 12;
         m = DateTime.now().minute;
+        s = DateTime.now().second;
       });
-      myClock();
+      MyWatch();
     });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    myClock();
+    MyWatch();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white70,
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
+        title: Text(
+          "Clock App",
+          style: TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
-        title: Text("Clock App"),
       ),
       body: Container(
         height: double.infinity,
@@ -47,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
-                "https://images.freeimages.com/365/images/previews/c3b/water-theme-vector-8594.jpg"),
+                "https://img.jagranjosh.com/webstories/42387/world-water-day-1679466339.jpeg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -65,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Center(
                 child: Text(
-                  "Analog clock",
+                  "Strap Watch",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
@@ -74,88 +76,54 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 200,
+            ),
             Center(
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Container(
-                    height: 400,
-                    width: 400,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xff00A5FF),
-                    ),
-                  ),
-                  Container(
-                    height: 322,
-                    width: 322,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.yellow,
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            "https://4vector.com/i/free-vector-water-theme-vector_003482_water2.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
                   ...List.generate(
-                    60,
+                    24,
                     (index) => Transform.rotate(
-                      angle: (pi * 2) * (index / 60),
+                      angle: (pi * 2) * (index / 24),
                       child: Divider(
-                        endIndent: MediaQuery.of(context).size.width * .95,
-                        color: (index % 5 == 0) ? Colors.red : Colors.grey,
-                        thickness: (index % 5 == 0) ? 7 : 4,
+                        color: Color(0xff0016FF),
+                        indent: MediaQuery.of(context).size.width * .50,
+                        endIndent: MediaQuery.of(context).size.width * .35,
+                        thickness: 3,
                       ),
                     ),
                   ),
-                  Transform.rotate(
-                    angle: pi / 2,
-                    child: Transform.rotate(
-                      angle: (pi * 2) * (s / 60),
-                      child: Divider(
-                        color: Color(0xff00A5FF),
-                        thickness: 2,
-                        endIndent: MediaQuery.of(context).size.width * .5,
-                        indent: MediaQuery.of(context).size.width * .10,
-                      ),
+                  Transform.scale(
+                    scale: 8,
+                    child: CircularProgressIndicator(
+                      color: Colors.deepOrange,
+                      strokeWidth: 4,
+                      value: s.toDouble() / 60,
                     ),
                   ),
-                  Transform.rotate(
-                    angle: pi / 2,
-                    child: Transform.rotate(
-                      angle: (pi * 2) * (m / 60),
-                      child: Divider(
-                        color: Color(0xff00A5FF),
-                        thickness: 4,
-                        endIndent: MediaQuery.of(context).size.width * .5,
-                        indent: MediaQuery.of(context).size.width * .15,
-                      ),
+                  Transform.scale(
+                    scale: 6,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 5,
+                      value: m.toDouble() / 60,
                     ),
                   ),
-                  Transform.rotate(
-                    angle: pi / 2,
-                    child: Transform.rotate(
-                      angle: (pi * 2) * (h / 12),
-                      child: Divider(
-                        color: Color(0xff00A5FF),
-                        thickness: 7,
-                        endIndent: MediaQuery.of(context).size.width * .5,
-                        indent: MediaQuery.of(context).size.width * .20,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blueAccent,
+                  Transform.scale(
+                    scale: 4,
+                    child: CircularProgressIndicator(
+                      color: Colors.green,
+                      strokeWidth: 8,
+                      value: h.toDouble() / 12,
                     ),
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 150,
             ),
             Row(
               children: [
@@ -188,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Spacer(),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushNamed('strap_watch');
+                    Navigator.of(context).pushNamed('/');
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 60, right: 10),
@@ -202,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     child: Center(
                       child: Text(
-                        "Strap Watch",
+                        "Analog Clock",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w400,

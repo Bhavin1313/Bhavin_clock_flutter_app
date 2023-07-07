@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:unttime/strap.dart';
 
+import 'Digital.dart';
 import 'MyHomePage.dart';
 
 void main() {
@@ -23,7 +25,12 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
       ),
-      home: MyHomePage(),
+      routes: {
+        '/': (context) => MyHomePage(),
+        'digital': (context) => HomePage(),
+        'strap_watch': (context) => StrapWatch(),
+        // 'cart_page': (context) => Cart_Page(),
+      },
     );
   }
 }
